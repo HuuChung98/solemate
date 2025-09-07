@@ -15,6 +15,7 @@ import {
   Put,
   UploadedFile,
   UseInterceptors,
+  Header,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
@@ -71,6 +72,23 @@ class User {
   // certification: string;
 }
 
+class PaymentInformation {
+  @ApiProperty({ description: 'userId', type: Number })
+  user_id: number;
+
+  @ApiProperty({ description: 'token', type: String })
+  token_last4: string;
+
+  @ApiProperty({ description: 'brand', type: String })
+  brand: string;
+
+  @ApiProperty({ description: 'expMonth', type: Number })
+  exp_month: number;
+
+  @ApiProperty({ description: 'expYear', type: Number })
+  exp_year: number;
+}
+
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt')) // jwt là key mặc định
 @ApiTags('Users')
@@ -86,7 +104,20 @@ export class UserController {
   getUser(@Headers('token') token: string) {
     return this.userService.getUser(token);
   }
-  //   // Tạo người dùng
+
+  // get Address by user id
+  @Get('address/:id')
+  getAddressByUserId(@Headers('token') token: string, @Param('id') id: string) {
+    return this.userService.getAddressByUserId(token, +id);
+  }
+  //   // Payment Methods by user id
+  @Post()
+  getPaymentMethodsByUserId(
+    @Headers('token') token: string,
+    @Body() payload: PaymentInformation,
+  ) {
+    return this.userService.getPaymentMethodsByUserId(token, payload);
+  }
   //   @Post()
   //   createUser(@Headers('token') token: string, @Body() values: User) {
   //     return this.userService.createUser(token, values);

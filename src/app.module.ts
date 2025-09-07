@@ -9,6 +9,8 @@ import { JwtStrategy } from './strategy/jwt.strategy';
 import { BrandsModule } from './brands/brands.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
+import { InventoryModule } from './inventory/inventory.module';
+import { CouponsModule } from './coupons/coupons.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { ProductsModule } from './products/products.module';
     BrandsModule,
     CategoriesModule,
     ProductsModule,
+    InventoryModule,
+    CouponsModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],

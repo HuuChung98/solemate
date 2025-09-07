@@ -73,6 +73,67 @@ export class UserService {
     }
   }
 
+  async getAddressByUserId(token, id: number) {
+    try {
+      await this.jwtService.verifyAsync(token, {
+        secret: jwtConstants.secret,
+      });
+      const data = await this.prisma.user_addresses.findMany({
+        where: { user_id: id },
+      });
+      return data;
+    } catch (error) {
+      return 'Error authentication';
+    }
+  }
+
+  async getPaymentMethodsByUserId(token, payload) {
+    try {
+      await this.jwtService.verifyAsync(token, {
+        secret: jwtConstants.secret,
+      });
+
+      const { user_id, token_last4, brand, exp_month, exp_year } = payload;
+      const createAt = new Date();
+
+      const checkUser = await this.prisma.users.findFirst({
+        where: { id: Number(user_id) },
+      });
+
+      if (!checkUser) {
+        return 'User not found, please check the user ID again';
+      }
+
+      const payloadPayment = {
+        user_id: Number(user_id),
+        psp: 'stripe',
+        token_last4: String(token_last4),
+        brand: String(brand),
+        exp_month: Number(exp_month),
+        exp_year: Number(exp_year),
+        created_at: createAt,
+      };
+
+      const data = await this.prisma.payment_methods.create({
+        data: {
+          ...payloadPayment,
+        },
+      });
+      return { ...data, message: 'Payment successful' };
+    } catch (error) {
+      return 'Error authentication';
+    }
+  }
+
+  //   async removeUser(token, id: number) {
+  //     try {
+  //       await this.jwtService.verifyAsync(token, {
+  //         secret: jwtConstants.secret,
+  //       });
+  //       const user = await this.prisma.nguoiDung.findFirst({
+  //         where: { nguoi_dung_id: id },
+  //       })
+
   //   async removeUser(token, id: number) {
   //     try {
   //       await this.jwtService.verifyAsync(token, {
