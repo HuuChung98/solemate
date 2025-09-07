@@ -1,1 +1,0 @@
-{"version":3,"file":"job-detail.module.js","sourceRoot":"","sources":["../../src/job-detail/job-detail.module.ts"],"names":[],"mappings":";;;;;;;;;AAAA,2CAAwC;AACxC,6DAAwD;AACxD,mEAA8D;AAMvD,IAAM,eAAe,6BAArB,MAAM,eAAe;CAAG,CAAA;0BAAlB,eAAe;IAJ3B,IAAA,eAAM,EAAC;QACN,WAAW,EAAE,CAAC,2CAAmB,CAAC;QAClC,SAAS,EAAE,CAAC,qCAAgB,CAAC;KAC9B,CAAC;GACW,eAAe,CAAG"}

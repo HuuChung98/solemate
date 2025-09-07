@@ -1,37 +1,36 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateAuthDto {
-    @ApiProperty({ description: "userId", type: Number})
-    nguoi_dung_id: number;
+  @ApiProperty({ description: 'id', type: Number })
+  id: number;
 
-    @ApiProperty({ description: "name", type: String})
-    ten_nguoi_dung: string;
+  // @ApiProperty({ description: 'name', type: String })
+  // ten_nguoi_dung: string;
 
-    @ApiProperty({ description: "hinhDaiDien", type: String})
-    hinh_dai_dien: string;
+  // @ApiProperty({ description: 'hinhDaiDien', type: String })
+  // hinh_dai_dien: string;
 
-    @ApiProperty( { description: "email", type: String})
-    email: string;
+  @ApiProperty({ description: 'email', type: String })
+  email: string;
 
-    @ApiProperty( { description: "password", type: String})
-    pass_word: string;
+  @ApiProperty({ description: 'password_hash', type: String })
+  password_hash: string;
 
-    @ApiProperty( { description: "phone", type: String})
-    phone: string;
+  // @ApiProperty({ description: 'phone', type: String })
+  // phone: string;
 
-    @ApiProperty( { description: "birthday", type: String})
-    birth_day: string;
+  // @ApiProperty({ description: 'birthday', type: String })
+  // birth_day: string;
 
-    @ApiProperty( { description: "gender", type: String})
-    gender: string;
+  // @ApiProperty({ description: 'gender', type: String })
+  // gender: string;
 
-    @ApiProperty({ description: "role", type: String})
-    role: string
+  // @ApiProperty({ description: 'role', type: String })
+  // role: string;
 
-    @ApiProperty({ description: "skill", type: String})
-    skill: string
+  // @ApiProperty({ description: 'skill', type: String })
+  // skill: string;
 
-    @ApiProperty( { description: "certification", type: String})
-    certification: string
-
+  // @ApiProperty({ description: 'certification', type: String })
+  // certification: string;
 }

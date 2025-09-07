@@ -2,13 +2,13 @@ import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 declare class userType {
     email: string;
-    pass_word: string;
+    password: string;
 }
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
-    signUp(createAuthDto: CreateAuthDto): Promise<"Đã tạo tài khoản" | "Email đã tồn tại" | "Lổi BE">;
-    login(userLogin: userType): Promise<"Đăng nhập không thành công" | {
+    signUp(createAuthDto: CreateAuthDto): Promise<"Account created successfully" | "Email already exists" | "Server error">;
+    login(userLogin: userType): Promise<"Login failed" | {
         access_token: string;
     }>;
 }

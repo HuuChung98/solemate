@@ -7,85 +7,266 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model ChiTietLoaiCongViec {
-  chiTiet_id         Int           @id @default(autoincrement())
-  ten_chi_tiet       String?       @db.VarChar(100)
-  hinh_anh           String?       @db.Text
-  loaiCongViec_id    Int?
-  nhom_chi_tiet_loai String?       @db.Text
-  LoaiCongViec       LoaiCongViec? @relation(fields: [loaiCongViec_id], references: [loaiCongViec_id], onDelete: Cascade, map: "ChiTietLoaiCongViec_ibfk_1")
-  CongViec           CongViec[]
-
-  @@index([loaiCongViec_id], map: "loaiCongViec_id")
+model brands {
+  id         BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
+  name       String     @db.VarChar(120)
+  slug       String     @unique(map: "uq_brands_slug") @db.VarChar(160)
+  created_at DateTime   @default(now()) @db.Timestamp(0)
+  products   products[]
 }
 
-model LoaiCongViec {
-  loaiCongViec_id     Int                   @id @default(autoincrement())
-  ten_loai_cong_viec  String?               @db.VarChar(100)
-  hinh_anh            String?               @db.Text
-  ChiTietLoaiCongViec ChiTietLoaiCongViec[]
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model cart_items {
+  id               BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  cart_id          BigInt           @db.UnsignedBigInt
+  variant_id       BigInt           @db.UnsignedBigInt
+  qty              Int
+  price_at_add     Decimal          @db.Decimal(12, 2)
+  created_at       DateTime         @default(now()) @db.Timestamp(0)
+  carts            carts            @relation(fields: [cart_id], references: [id], onDelete: Cascade, map: "fk_cart_items_cart")
+  product_variants product_variants @relation(fields: [variant_id], references: [id], map: "fk_cart_items_variant")
+
+  @@unique([cart_id, variant_id], map: "uq_cart_item")
+  @@index([variant_id], map: "idx_cart_items_variant")
 }
 
-model BinhLuan {
-  binh_luan_id   Int        @id @default(autoincrement())
-  congViec_id    Int?
-  nguoi_dung_id  Int?
-  ngay_binh_luan DateTime?  @db.DateTime(0)
-  noi_dung       String?    @db.VarChar(100)
-  sao_binh_luan  Int?
-  CongViec       CongViec?  @relation(fields: [congViec_id], references: [congViec_id], onDelete: Cascade, map: "BinhLuan_ibfk_1")
-  NguoiDung      NguoiDung? @relation(fields: [nguoi_dung_id], references: [nguoi_dung_id], onDelete: Cascade, map: "BinhLuan_ibfk_2")
+model carts {
+  id         BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
+  user_id    BigInt?      @db.UnsignedBigInt
+  created_at DateTime     @default(now()) @db.Timestamp(0)
+  cart_items cart_items[]
+  users      users?       @relation(fields: [user_id], references: [id], map: "fk_carts_user")
 
-  @@index([congViec_id], map: "congViec_id")
-  @@index([nguoi_dung_id], map: "nguoi_dung_id")
+  @@index([user_id], map: "idx_carts_user")
 }
 
-model CongViec {
-  congViec_id         Int                  @id @default(autoincrement())
-  ten_cong_viec       String?              @db.VarChar(100)
-  danh_gia            Int?
-  gia_tien            Int?
-  hinh_anh            String?              @db.Text
-  mo_ta               String?              @db.Text
-  mo_ta_ngan          String?              @db.Text
-  sao_cong_viec       Int?
-  chiTiet_id          Int?
-  nguoi_dung_id       Int?
-  BinhLuan            BinhLuan[]
-  ChiTietLoaiCongViec ChiTietLoaiCongViec? @relation(fields: [chiTiet_id], references: [chiTiet_id], onDelete: Cascade, map: "CongViec_ibfk_1")
-  NguoiDung           NguoiDung?           @relation(fields: [nguoi_dung_id], references: [nguoi_dung_id], onDelete: Cascade, map: "CongViec_ibfk_2")
-  ThueCongViec        ThueCongViec[]
+model categories {
+  id               BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
+  name             String       @db.VarChar(160)
+  parent_id        BigInt?      @db.UnsignedBigInt
+  slug             String       @unique(map: "uq_categories_slug") @db.VarChar(200)
+  created_at       DateTime     @default(now()) @db.Timestamp(0)
+  categories       categories?  @relation("categoriesTocategories", fields: [parent_id], references: [id], map: "fk_categories_parent")
+  other_categories categories[] @relation("categoriesTocategories")
+  products         products[]
 
-  @@index([chiTiet_id], map: "chiTiet_id")
-  @@index([nguoi_dung_id], map: "nguoi_dung_id")
+  @@index([parent_id], map: "fk_categories_parent")
 }
 
-model NguoiDung {
-  nguoi_dung_id  Int            @id @default(autoincrement())
-  ten_nguoi_dung String?        @db.VarChar(100)
-  email          String?        @db.VarChar(100)
-  pass_word      String?        @db.VarChar(100)
-  phone          String?        @db.VarChar(100)
-  birth_day      String?        @db.VarChar(100)
-  gender         String?        @db.VarChar(100)
-  role           String?        @db.VarChar(100)
-  skill          String?        @db.VarChar(100)
-  certification  String?        @db.VarChar(100)
-  hinh_dai_dien  String?        @db.VarChar(100)
-  BinhLuan       BinhLuan[]
-  CongViec       CongViec[]
-  ThueCongViec   ThueCongViec[]
+model coupons {
+  id              BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+  code            String          @unique(map: "uq_coupons_code") @db.VarChar(80)
+  rule            Json
+  starts_at       DateTime?       @db.DateTime(0)
+  ends_at         DateTime?       @db.DateTime(0)
+  max_redemptions Int?
+  created_at      DateTime        @default(now()) @db.Timestamp(0)
+  order_coupons   order_coupons[]
 }
 
-model ThueCongViec {
-  thue_cong_viec_id Int        @id @default(autoincrement())
-  ngay_thue         DateTime?  @db.DateTime(0)
-  hoan_thanh        Boolean?
-  congViec_id       Int?
-  nguoi_dung_id     Int?
-  CongViec          CongViec?  @relation(fields: [congViec_id], references: [congViec_id], onDelete: Cascade, map: "ThueCongViec_ibfk_1")
-  NguoiDung         NguoiDung? @relation(fields: [nguoi_dung_id], references: [nguoi_dung_id], onDelete: Cascade, map: "ThueCongViec_ibfk_2")
+model inventory {
+  variant_id       BigInt           @id @db.UnsignedBigInt
+  stock_on_hand    Int              @default(0)
+  reserved         Int              @default(0)
+  threshold        Int              @default(0)
+  updated_at       DateTime         @default(now()) @db.Timestamp(0)
+  product_variants product_variants @relation(fields: [variant_id], references: [id], onDelete: Cascade, map: "fk_inventory_variant")
+}
 
-  @@index([congViec_id], map: "congViec_id")
-  @@index([nguoi_dung_id], map: "nguoi_dung_id")
+model invoices {
+  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  order_id   BigInt   @db.UnsignedBigInt
+  number     String   @unique(map: "uq_invoices_number") @db.VarChar(60)
+  amount     Decimal  @db.Decimal(14, 2)
+  issued_at  DateTime @db.DateTime(0)
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  orders     orders   @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "fk_invoices_order")
+
+  @@index([order_id], map: "idx_invoices_order")
+}
+
+model order_coupons {
+  order_id  BigInt  @db.UnsignedBigInt
+  coupon_id BigInt  @db.UnsignedBigInt
+  coupons   coupons @relation(fields: [coupon_id], references: [id], map: "fk_order_coupons_coupon")
+  orders    orders  @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "fk_order_coupons_order")
+
+  @@id([order_id, coupon_id])
+  @@index([coupon_id], map: "fk_order_coupons_coupon")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model order_items {
+  id               BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  order_id         BigInt           @db.UnsignedBigInt
+  variant_id       BigInt           @db.UnsignedBigInt
+  qty              Int
+  price            Decimal          @db.Decimal(12, 2)
+  orders           orders           @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "fk_order_items_order")
+  product_variants product_variants @relation(fields: [variant_id], references: [id], map: "fk_order_items_variant")
+
+  @@unique([order_id, variant_id], map: "uq_order_item")
+  @@index([variant_id], map: "idx_order_items_variant")
+}
+
+model orders {
+  id                  BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+  user_id             BigInt          @db.UnsignedBigInt
+  shipping_address_id BigInt?         @db.UnsignedBigInt
+  total               Decimal         @default(0.00) @db.Decimal(14, 2)
+  status              String          @db.VarChar(40)
+  placed_at           DateTime        @default(now()) @db.Timestamp(0)
+  invoices            invoices[]
+  order_coupons       order_coupons[]
+  order_items         order_items[]
+  user_addresses      user_addresses? @relation(fields: [shipping_address_id], references: [id], map: "fk_orders_shipping_address")
+  users               users           @relation(fields: [user_id], references: [id], map: "fk_orders_user")
+  payments            payments[]
+  refunds             refunds[]
+  shipments           shipments[]
+
+  @@index([shipping_address_id], map: "fk_orders_shipping_address")
+  @@index([placed_at], map: "idx_orders_placed_at")
+  @@index([status], map: "idx_orders_status")
+  @@index([user_id], map: "idx_orders_user")
+}
+
+model payment_methods {
+  id          BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  user_id     BigInt   @db.UnsignedBigInt
+  psp         String   @db.VarChar(40)
+  token_last4 String   @db.VarChar(8)
+  brand       String?  @db.VarChar(40)
+  exp_month   Int?     @db.UnsignedTinyInt
+  exp_year    Int?     @db.UnsignedSmallInt
+  created_at  DateTime @default(now()) @db.Timestamp(0)
+  users       users    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_payment_methods_user")
+
+  @@index([user_id], map: "idx_payment_methods_user")
+}
+
+model payments {
+  id             BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  order_id       BigInt    @db.UnsignedBigInt
+  psp            String    @db.VarChar(40)
+  transaction_id String    @db.VarChar(120)
+  status         String    @db.VarChar(40)
+  paid_at        DateTime? @db.DateTime(0)
+  created_at     DateTime  @default(now()) @db.Timestamp(0)
+  orders         orders    @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "fk_payments_order")
+  refunds        refunds[]
+
+  @@unique([psp, transaction_id], map: "uq_payments_tx")
+  @@index([order_id], map: "idx_payments_order")
+}
+
+model product_variants {
+  id          BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
+  product_id  BigInt        @db.UnsignedBigInt
+  sku         String        @unique(map: "uq_variants_sku") @db.VarChar(100)
+  attributes  Json?
+  price       Decimal       @db.Decimal(12, 2)
+  created_at  DateTime      @default(now()) @db.Timestamp(0)
+  cart_items  cart_items[]
+  inventory   inventory?
+  order_items order_items[]
+  products    products      @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "fk_variants_product")
+
+  @@index([price], map: "idx_variants_price")
+  @@index([product_id], map: "idx_variants_product")
+}
+
+model products {
+  id               BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  title            String             @db.VarChar(255)
+  brand_id         BigInt             @db.UnsignedBigInt
+  category_id      BigInt             @db.UnsignedBigInt
+  description      String?            @db.Text
+  created_at       DateTime           @default(now()) @db.Timestamp(0)
+  product_variants product_variants[]
+  brands           brands             @relation(fields: [brand_id], references: [id], map: "fk_products_brand")
+  categories       categories         @relation(fields: [category_id], references: [id], map: "fk_products_category")
+  reviews          reviews[]
+
+  @@index([brand_id], map: "idx_products_brand")
+  @@index([category_id], map: "idx_products_category")
+  @@index([title], map: "idx_products_title")
+}
+
+model refunds {
+  id          BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  order_id    BigInt    @db.UnsignedBigInt
+  payment_id  BigInt    @db.UnsignedBigInt
+  amount      Decimal   @db.Decimal(14, 2)
+  reason      String?   @db.VarChar(255)
+  status      String    @db.VarChar(40)
+  refunded_at DateTime? @db.DateTime(0)
+  created_at  DateTime  @default(now()) @db.Timestamp(0)
+  orders      orders    @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "fk_refunds_order")
+  payments    payments  @relation(fields: [payment_id], references: [id], map: "fk_refunds_payment")
+
+  @@index([order_id], map: "idx_refunds_order")
+  @@index([payment_id], map: "idx_refunds_payment")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model reviews {
+  id                BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  user_id           BigInt   @db.UnsignedBigInt
+  product_id        BigInt   @db.UnsignedBigInt
+  rating            Decimal  @db.Decimal(2, 1)
+  content           String?  @db.Text
+  verified_purchase Boolean  @default(false)
+  created_at        DateTime @default(now()) @db.Timestamp(0)
+  products          products @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "fk_reviews_product")
+  users             users    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_reviews_user")
+
+  @@unique([user_id, product_id], map: "uq_reviews_user_product")
+  @@index([product_id], map: "idx_reviews_product")
+  @@index([rating], map: "idx_reviews_rating")
+}
+
+model shipments {
+  id              BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  order_id        BigInt    @db.UnsignedBigInt
+  carrier         String    @db.VarChar(80)
+  tracking_number String?   @db.VarChar(120)
+  status          String    @db.VarChar(40)
+  shipped_at      DateTime? @db.DateTime(0)
+  created_at      DateTime  @default(now()) @db.Timestamp(0)
+  orders          orders    @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "fk_shipments_order")
+
+  @@index([order_id], map: "idx_shipments_order")
+  @@index([tracking_number], map: "idx_shipments_tracking")
+}
+
+model user_addresses {
+  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  user_id    BigInt   @db.UnsignedBigInt
+  line1      String   @db.VarChar(255)
+  line2      String?  @db.VarChar(255)
+  city       String   @db.VarChar(120)
+  state      String?  @db.VarChar(120)
+  country    String   @db.VarChar(120)
+  zip        String?  @db.VarChar(30)
+  is_default Boolean  @default(false)
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  orders     orders[]
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_addresses_user")
+
+  @@index([user_id], map: "idx_addresses_user")
+}
+
+model users {
+  id              BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  email           String            @unique(map: "uq_users_email") @db.VarChar(190)
+  phone           String?           @db.VarChar(40)
+  password_hash   String            @db.VarChar(255)
+  mfa_enabled     Boolean           @default(false)
+  created_at      DateTime          @default(now()) @db.Timestamp(0)
+  carts           carts[]
+  orders          orders[]
+  payment_methods payment_methods[]
+  reviews         reviews[]
+  user_addresses  user_addresses[]
 }

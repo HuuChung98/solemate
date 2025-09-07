@@ -11,12 +11,6 @@ const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const user_module_1 = require("./user/user.module");
-const hire_job_module_1 = require("./hire-job/hire-job.module");
-const skill_module_1 = require("./skill/skill.module");
-const job_type_module_1 = require("./job-type/job-type.module");
-const job_module_1 = require("./job/job.module");
-const job_detail_module_1 = require("./job-detail/job-detail.module");
-const comment_module_1 = require("./comment/comment.module");
 const config_1 = require("@nestjs/config");
 const auth_module_1 = require("./auth/auth.module");
 const jwt_strategy_1 = require("./strategy/jwt.strategy");
@@ -27,12 +21,6 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             user_module_1.UserModule,
             auth_module_1.AuthModule,
-            job_module_1.JobModule,
-            job_detail_module_1.JobDetailModule,
-            comment_module_1.CommentModule,
-            job_type_module_1.JobTypeModule,
-            skill_module_1.SkillModule,
-            hire_job_module_1.HireJobModule,
             config_1.ConfigModule.forRoot({ isGlobal: true }),
         ],
         controllers: [app_controller_1.AppController],

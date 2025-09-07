@@ -20,13 +20,13 @@ const swagger_1 = require("@nestjs/swagger");
 class userType {
 }
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: "email", type: String }),
+    (0, swagger_1.ApiProperty)({ description: 'email', type: String }),
     __metadata("design:type", String)
 ], userType.prototype, "email", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: "password", type: String }),
+    (0, swagger_1.ApiProperty)({ description: 'password', type: String }),
     __metadata("design:type", String)
-], userType.prototype, "pass_word", void 0);
+], userType.prototype, "password", void 0);
 let AuthController = exports.AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -39,14 +39,14 @@ let AuthController = exports.AuthController = class AuthController {
     }
 };
 __decorate([
-    (0, common_1.Post)("/sign-up"),
+    (0, common_1.Post)('/sign-up'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_auth_dto_1.CreateAuthDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "signUp", null);
 __decorate([
-    (0, common_1.Post)("/login"),
+    (0, common_1.Post)('/login'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [userType]),
@@ -54,7 +54,7 @@ __decorate([
 ], AuthController.prototype, "login", null);
 exports.AuthController = AuthController = __decorate([
     (0, swagger_1.ApiBearerAuth)(),
-    (0, swagger_1.ApiTags)("Auth"),
+    (0, swagger_1.ApiTags)('Auth'),
     (0, common_1.Controller)('api/auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], AuthController);

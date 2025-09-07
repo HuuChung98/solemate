@@ -15,47 +15,15 @@ class CreateAuthDto {
 }
 exports.CreateAuthDto = CreateAuthDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: "userId", type: Number }),
+    (0, swagger_1.ApiProperty)({ description: 'id', type: Number }),
     __metadata("design:type", Number)
-], CreateAuthDto.prototype, "nguoi_dung_id", void 0);
+], CreateAuthDto.prototype, "id", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: "name", type: String }),
-    __metadata("design:type", String)
-], CreateAuthDto.prototype, "ten_nguoi_dung", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: "hinhDaiDien", type: String }),
-    __metadata("design:type", String)
-], CreateAuthDto.prototype, "hinh_dai_dien", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: "email", type: String }),
+    (0, swagger_1.ApiProperty)({ description: 'email', type: String }),
     __metadata("design:type", String)
 ], CreateAuthDto.prototype, "email", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: "password", type: String }),
+    (0, swagger_1.ApiProperty)({ description: 'password_hash', type: String }),
     __metadata("design:type", String)
-], CreateAuthDto.prototype, "pass_word", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: "phone", type: String }),
-    __metadata("design:type", String)
-], CreateAuthDto.prototype, "phone", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: "birthday", type: String }),
-    __metadata("design:type", String)
-], CreateAuthDto.prototype, "birth_day", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: "gender", type: String }),
-    __metadata("design:type", String)
-], CreateAuthDto.prototype, "gender", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: "role", type: String }),
-    __metadata("design:type", String)
-], CreateAuthDto.prototype, "role", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: "skill", type: String }),
-    __metadata("design:type", String)
-], CreateAuthDto.prototype, "skill", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: "certification", type: String }),
-    __metadata("design:type", String)
-], CreateAuthDto.prototype, "certification", void 0);
+], CreateAuthDto.prototype, "password_hash", void 0);
 //# sourceMappingURL=create-auth.dto.js.map

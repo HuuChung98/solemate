@@ -18,38 +18,39 @@ let AuthService = exports.AuthService = class AuthService {
         this.jwtService = jwtService;
         this.prisma = new client_1.PrismaClient();
     }
-    ;
     async signUp(createAuthDto) {
         try {
-            let checkUser = await this.prisma.nguoiDung.findFirst({ where: {
-                    email: createAuthDto.email
-                } });
+            const checkUser = await this.prisma.users.findFirst({
+                where: {
+                    email: createAuthDto.email,
+                },
+            });
             if (!checkUser) {
-                await this.prisma.nguoiDung.create({ data: createAuthDto });
-                return "Đã tạo tài khoản";
+                await this.prisma.users.create({ data: createAuthDto });
+                return 'Account created successfully';
             }
             else {
-                return "Email đã tồn tại";
+                return 'Email already exists';
             }
         }
         catch (error) {
-            return "Lổi BE";
+            return 'Server error';
         }
     }
     async login(userLogin) {
         try {
-            let { email, pass_word } = userLogin;
-            const user = await this.prisma.nguoiDung.findFirst({ where: { email } });
-            if (user?.pass_word !== pass_word) {
+            const { email, password } = userLogin;
+            const user = await this.prisma.users.findFirst({ where: { email } });
+            if (user?.password_hash !== password) {
                 throw new common_1.UnauthorizedException();
             }
             const payload = { email: user.email };
             return {
-                access_token: await this.jwtService.signAsync(payload)
+                access_token: await this.jwtService.signAsync(payload),
             };
         }
         catch (error) {
-            return "Đăng nhập không thành công";
+            return 'Login failed';
         }
     }
 };
