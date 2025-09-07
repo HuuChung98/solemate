@@ -81,11 +81,11 @@ export class UserController {
     private jwtService: JwtService,
   ) {}
 
-  //   // Lấy danh sách người dùng
-  //   @Get()
-  //   getUser(@Headers('token') token: string) {
-  //     return this.userService.getUser(token);
-  //   }
+  // get users
+  @Get()
+  getUser(@Headers('token') token: string) {
+    return this.userService.getUser(token);
+  }
   //   // Tạo người dùng
   //   @Post()
   //   createUser(@Headers('token') token: string, @Body() values: User) {

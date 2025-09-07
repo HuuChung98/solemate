@@ -1,12 +1,13 @@
 import { Body, HttpException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { PrismaClient } from '@prisma/client';
 import { jwtConstants } from 'src/auth/auth.constants';
 
 @Injectable()
 export class UserService {
   constructor(private jwtService: JwtService) {}
 
-  //   prisma = new PrismaClient();
+  prisma = new PrismaClient();
 
   //   async createUser(token, values) {
   //     try {
@@ -60,17 +61,19 @@ export class UserService {
   //     }
   //   }
 
-  //   async getUser(token) {
-  //     try {
-  //       await this.jwtService.verifyAsync(token, {
-  //         secret: jwtConstants.secret,
-  //       });
-  //       const data = await this.prisma.nguoiDung.findMany();
-  //       return data;
-  //     } catch (error) {
-  //       return 'Lỗi xác thực';
-  //     }
-  //   }
+  async getUser(token) {
+    try {
+      await this.jwtService.verifyAsync(token, {
+        secret: jwtConstants.secret,
+      });
+      console.log('da xac thuc');
+      const data = await this.prisma.users.findMany();
+      console.log(data);
+      return data;
+    } catch (error) {
+      return 'Error authentication';
+    }
+  }
 
   //   async removeUser(token, id: number) {
   //     try {

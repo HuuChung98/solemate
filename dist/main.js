@@ -4,6 +4,9 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const swagger_1 = require("@nestjs/swagger");
 async function bootstrap() {
+    BigInt.prototype.toJSON = function () {
+        return this.toString();
+    };
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors();
     const config = new swagger_1.DocumentBuilder()

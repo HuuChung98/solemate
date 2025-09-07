@@ -12,9 +12,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
+const client_1 = require("@prisma/client");
+const auth_constants_1 = require("../auth/auth.constants");
 let UserService = exports.UserService = class UserService {
     constructor(jwtService) {
         this.jwtService = jwtService;
+        this.prisma = new client_1.PrismaClient();
+    }
+    async getUser(token) {
+        try {
+            await this.jwtService.verifyAsync(token, {
+                secret: auth_constants_1.jwtConstants.secret,
+            });
+            console.log('da xac thuc');
+            const data = await this.prisma.users.findMany();
+            console.log(data);
+            return data;
+        }
+        catch (error) {
+            return 'Error authentication';
+        }
     }
 };
 exports.UserService = UserService = __decorate([
