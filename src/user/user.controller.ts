@@ -73,7 +73,7 @@ class User {
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt')) // jwt là key mặc định
-@ApiTags('NguoiDung')
+@ApiTags('Users')
 @Controller('api/users')
 export class UserController {
   constructor(

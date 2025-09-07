@@ -6,6 +6,9 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 // import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { BrandsModule } from './brands/brands.module';
+import { CategoriesModule } from './categories/categories.module';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -13,6 +16,9 @@ import { JwtStrategy } from './strategy/jwt.strategy';
     UserModule,
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    BrandsModule,
+    CategoriesModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],

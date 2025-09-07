@@ -66,9 +66,7 @@ export class UserService {
       await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret,
       });
-      console.log('da xac thuc');
       const data = await this.prisma.users.findMany();
-      console.log(data);
       return data;
     } catch (error) {
       return 'Error authentication';
