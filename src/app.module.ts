@@ -11,6 +11,9 @@ import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { CouponsModule } from './coupons/coupons.module';
+import { CartsModule } from './carts/carts.module';
+import { ReviewsModule } from './reviews/reviews.module';
+import { ShipmentsModule } from './shipments/shipments.module';
 
 @Module({
   imports: [
@@ -23,6 +26,9 @@ import { CouponsModule } from './coupons/coupons.module';
     ProductsModule,
     InventoryModule,
     CouponsModule,
+    CartsModule,
+    ReviewsModule,
+    ShipmentsModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],
